@@ -1,0 +1,9 @@
+{% extends "plantilla/index.html" %}
+{% block my_form %}
+<h1>{{ title_form }}</h1>
+<h2>Edita el recurso: </h2><br>
+<form action="" method="POST">
+<input type="text" name="rec_cont" value="" placeholder="{{ rec_cont }}" width="220"><br>
+<input type="submit" value="Guardar cambios">
+</form>
+{% endblock %}

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{{title}}</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
+<link rel="stylesheet" href="/plantilla/stylesheet.css" type="text/css" />
+</head>
+
+<body>
+
+<div id="container">
+	<div id="header">
+		<h2>{{ logged }}<a href="{{ url_logged }}">{{ logged_str }}</a></h2>
+		<h1><a href="{{ url_root }}"><strong>{{ title }}</strong></a></h1>
+	</div>
+
+	<div id="navigation">
+		<ul>
+			<li><a href="/">HOME</a></li>
+			<li><a href="http://www.urjc.es">URJC</a></li>
+			<li><a href="http://www.aulavirtual.urjc.es">AULA VIRTUAL</a></li>
+			<li><a href="https://github.com/imfar/X-Serv-15.9-Django-CMS-Templates">REPOSITORIO</a></li>
+			<li><a href="#">Contact</a></li>
+		</ul>
+	</div>   
+                
+	<div id="content">
+
+		<h2>Funcionamiento (REST): </h2>
+		<p>GET /, GET /annotated/ y GET /edit/, MUESTRA los recursos añadidos hasta el momento.</p>
+		<p>GET /annotated/[recurso] MUESTRA el contenido del recurso si lo hubiera. </p>
+		<p>PUT /annotated/[recurso] AÑADE un recurso y MUESTRA su contenido (NECESITA AUTENTICACIÓN). </p>
+		<p>GET /edit/[recurso] MUESTRA un formulario para EDITAR un recurso si lo hubiera
+		(NECESITA AUTENTICACIÓN).</p>
+		<p>POST /edit/[recurso] actualiza el contenido del recurso AÑADIDO y se continua editando.</p>
+
+		<div id="my_form">
+		{% block my_form %}{% endblock %}
+		</div>
+
+		<h1>{{ rec_name }}</h1>
+		<h2>CONTENIDO:</h2>
+		<p>{{ rec_cont }}</p>
+		
+		<div class="post_info">
+			Practica SARO: 23 Abril 2018 | URJC
+		</div>
+		
+		<div id="footer">
+			Powered by <a href="https://github.com/imfar/X-Serv-15.9-Django-CMS-Templates">imfar</a> | 2018 &copy; All your copyright information here.<br />
+			Template design by <a href="http://www.iseeyou-designs.com">I See You - Designs</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> &amp; <a href="http://validator.w3.org/check?uri=referer">XHTML Strict!</a> valid.</p>
+		</div>
+	</div>
+</div>
+
+</body>
+
+</html>
