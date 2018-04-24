@@ -32,7 +32,9 @@
 		<p>PUT /annotated/[recurso] AÑADE un recurso y MUESTRA su contenido (NECESITA AUTENTICACIÓN). </p>
 		<p>GET /edit/[recurso] MUESTRA un formulario para EDITAR un recurso si lo hubiera
 		(NECESITA AUTENTICACIÓN).</p>
-		<p>POST /edit/[recurso] actualiza el contenido del recurso AÑADIDO y se continua editando.</p>
+		<p>POST /edit/[recurso] ACTUALIZA el contenido del formulario al recurso AÑADIDO y se continua editando (NECESITA AUTENTICACIÓN).
+		<br> Si haces un POST sin FORMULARIO (formato en el body)-> rec_cont=[contenido]
+		</p>
 
 		<div id="my_form">
 		{% block my_form %}{% endblock %}

@@ -21,17 +21,21 @@ def get_plantilla(logged, url_logged, logged_str, rec_name, rec_cont):
 	return my_template
 
 
-@csrf_exempt
-def root_page(request):
+def autenticar(request):  # genera strings necesarios para LOGIN - LOGOUT
 	if request.user.is_authenticated():
 		logged = "Logged in as " + request.user.username + ". "
 		logged_str = "Logout"
 		url_logged = "/logout"
 	else:
 		logged = "Not logged in. "
-		url_logged = "/login"
 		logged_str = "Login"
+		url_logged = "/login"
+	return (logged, logged_str, url_logged)
 
+
+@csrf_exempt
+def root_page(request):
+	(logged, logged_str, url_logged) =	autenticar(request)
 	recursos_DB = Resource.objects.all()
 	lista = "Recursos: ["
 	for my_rec in recursos_DB:
@@ -47,10 +51,8 @@ def root_page(request):
 
 @csrf_exempt
 def annotated(request, resource):
+	(logged, logged_str, url_logged) = autenticar(request)
 	if request.user.is_authenticated():
-		logged = "Logged in as " + request.user.username + ". "
-		logged_str = "Logout"
-		url_logged = "/logout"
 		if request.method == "PUT":
 			try:  # si el recurso YA existe, SE MUESTRA el contenido.
 				resource_DB = Resource.objects.get(name=resource)
@@ -79,12 +81,7 @@ def annotated(request, resource):
 					rec_name, rec_cont)
 					return HttpResponse(my_template)
 
-	else:
-		logged = "Not logged in. "
-		url_logged = "/login"
-		logged_str = "Login"
-
-	if request.method == "GET":
+	if request.method == "GET":  # Entra aqui si no autenticado
 		try:
 			resource_DB = Resource.objects.get(name=resource)
 			rec_name = resource_DB.name
@@ -99,7 +96,7 @@ def annotated(request, resource):
 		rec_name, rec_cont)
 		return HttpResponse(my_template)
 
-	elif request.method == "PUT":  # No logeado - No puede añadir recursos
+	elif request.method == "PUT":  # No puede añadir recursos
 		rec_name = "MENSAJE! ERROR DE AUTENTICACIÓN"
 		rec_cont = "Por favor. Identifiquese primero."
 		my_template = get_plantilla(logged, url_logged, logged_str,
@@ -116,10 +113,8 @@ def annotated(request, resource):
 
 @csrf_exempt
 def show_form(request, resource):
-	if request.user.is_authenticated():  # si esta autenticado
-		logged = "Logged in as " + request.user.username + ". "
-		logged_str = "Logout"
-		url_logged = "/logout"
+	(logged, logged_str, url_logged) = autenticar(request)
+	if request.user.is_authenticated():  # Si esta autenticado
 		try:  # si existe el recurso
 			resource_DB = Resource.objects.get(name=resource)
 			if request.method == "GET":
@@ -132,13 +127,13 @@ def show_form(request, resource):
 				'rec_cont': rec_cont, 'title_form': title_form})
 				my_template = template.render(c)
 				return HttpResponse(my_template)
-				
+
 			elif request.method == "POST":
 				rec_new_cont = request.POST['rec_cont']
 				#  actualiza el contenido
 				resource_DB.cont = rec_new_cont
 				resource_DB.save()
-				
+
 				resource_DB = Resource.objects.get(name=resource)
 				title_form = "Actualizado " + resource_DB.name
 				rec_cont = resource_DB.cont
@@ -147,7 +142,7 @@ def show_form(request, resource):
 				'logged': logged, 'url_logged': url_logged,
 				'logged_str': logged_str, 'rec_name': resource_DB.name,
 				'rec_cont': rec_cont, 'title_form': title_form})
-				my_template = template.render(c)				
+				my_template = template.render(c)			
 				return HttpResponse(my_template)
 			else:
 				rec_name = "MENSAJE! ACCIÓN NO VALIDA"
@@ -159,14 +154,11 @@ def show_form(request, resource):
 			rec_name = "MENSAJE!"
 			rec_cont = "ERROR!! - EL RECURSO NO EXISTE. \
 			Haga un PUT a 'localhost:8000/annotated/[nombre_recurso]'\
-			si desea añadirlo."	
+			si desea añadirlo."
 			my_template = get_plantilla(logged, url_logged, logged_str,
 			rec_name, rec_cont)
 			return HttpResponse(my_template)
 	else:  # NO AUTENTICADO
-		logged = "Not logged in. "
-		url_logged = "/login"
-		logged_str = "Login"
 		rec_name = "MENSAJE!"
 		rec_cont = "Por favor. Identifiquese primero."
 		my_template = get_plantilla(logged, url_logged, logged_str,
